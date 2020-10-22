@@ -10,5 +10,5 @@ curl https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/master
 
 sysctl -p
 
-echo "优化完成!"
+yum install iptables -y
 
