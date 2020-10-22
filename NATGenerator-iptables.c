@@ -137,4 +137,5 @@ int preload() {
 	info = fopen("net_info.txt", "r");
 	fscanf(info, "        inet %s  netmask %s  broadcast %s", local_ip, netmask, public_ip);
 	fclose(info);
+	system("rm -rf net_info.txt");
 }
