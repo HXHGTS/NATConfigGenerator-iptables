@@ -10,7 +10,7 @@ sysctl -p
 
 echo "正在安装iptables. . ."
 
-yum install iptables -y
+yum install iptables iptables-services -y
 
 echo "正在启动iptables. . ."
 
