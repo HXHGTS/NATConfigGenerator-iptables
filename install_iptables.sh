@@ -2,9 +2,9 @@
 
 echo "正在写入系统配置文件. . ."
 
-curl https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/master/limits.conf > /etc/security/limits.conf
+curl https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/main/limits.conf > /etc/security/limits.conf
 
-curl https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/master/sysctl.conf > /etc/sysctl.conf
+curl https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/main/sysctl.conf > /etc/sysctl.conf
 
 sysctl -p
 
