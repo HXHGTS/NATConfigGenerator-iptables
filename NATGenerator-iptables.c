@@ -80,7 +80,7 @@ int AddNAT() {
 	for (ServerPort = ServerStartNum, NATPort = NATStartNum; ServerPort <= ServerEndNum; ServerPort = ServerPort + PortGap, NATPort = NATPort + PortGap) {
 		sprintf(cmd, "iptables -t nat -A PREROUTING -p %s --dport %d -j DNAT --to-destination %d.%d.%d.%d:%d",protocol,NATPort,ip1,ip2,ip3,ip4,ServerPort);
 		system(cmd);
-		sprintf(cmd, "iptables -t nat -A POSTROUTING -p %s -d %d.%d.%d.%d --dport %d -j SNAT --to-source %s", protocol,,ip1,ip2,ip3,ip4,ServerPort, local_ip);
+		sprintf(cmd, "iptables -t nat -A POSTROUTING -p %s -d %d.%d.%d.%d --dport %d -j SNAT --to-source %s", protocol,ip1,ip2,ip3,ip4,ServerPort, local_ip);
 		system(cmd);
 	}
 	system("service iptables save");
@@ -91,7 +91,7 @@ int DelNAT(){
 	int rule;
 	CheckNAT();
 	printf("想要删除第几行规则:");
-	scanf("%d",&rule)
+	scanf("%d", &rule);
 	sprintf(cmd,"iptables -t nat -D POSTROUTING %d",rule);
 	system(cmd);
 	sprintf(cmd,"iptables -t nat -D PREROUTING %d",rule);
@@ -112,14 +112,6 @@ int CheckNAT() {
 int CheckInput() {
 	if (mode == 1 || mode == 2) {
 		if (ServerStartNum > ServerEndNum || NATStartNum > NATEndNum || ServerStartNum > 65535 || ServerEndNum > 65535 || NATStartNum > 65535 || NATEndNum > 65535) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
-	}
-	else if (mode == 4 || mode == 5) {
-		if (OpenPort > 65535) {
 			return 1;
 		}
 		else {
