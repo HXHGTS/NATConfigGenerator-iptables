@@ -1,14 +1,15 @@
 #!/bin/sh
 
-echo "正在优化大文件读写性能. . ."
+echo "正在写入系统配置文件. . ."
 
 curl https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/master/limits.conf > /etc/security/limits.conf
-
-echo "正在优化文件io性能. . ."
 
 curl https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/master/sysctl.conf > /etc/sysctl.conf
 
 sysctl -p
 
+echo "正在安装iptables. . ."
+
 yum install iptables -y
 
+exit
