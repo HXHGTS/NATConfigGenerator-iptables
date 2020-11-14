@@ -8,44 +8,43 @@ FILE* info;
 int main() {
 	preload();
 	system("clear");
-	UI();
-	if (mode == 3) {
-		CheckNAT();
+	MENU:UI();
+	if (mode == 1) {
+	printf("请输入远程服务器起始端口号-终止端口号，如10000-20000:");
+	scanf("%d-%d", &ServerStartNum, &ServerEndNum);
+	printf("\n");
+	printf("请输入中转服务器起始端口号-终止端口号，如10000-20000:");
+	scanf("%d-%d", &NATStartNum, &NATEndNum);
+	printf("\n");
+	printf("请输入端口号间隔:");
+	scanf("%d", &PortGap);
+	printf("\n");
+	printf("请输入远程服务器ip，注意中间点改成空格，如8.8.8.8请写为8 8 8 8:");
+	scanf("%d %d %d %d", &ip1, &ip2, &ip3, &ip4);
+	printf("\n");
+	printf("请输入转发协议(t=tcp or u=udp):");
+	scanf("%s", protocol);
+	printf("\n");
+	if (CheckInput() == 1) {
+		printf("非法输入，请检查输入！\n");
 	}
-	else if (mode == 1 || mode == 2) {
-		printf("请输入远程服务器起始端口号-终止端口号，如10000-20000:");
-		scanf("%d-%d", &ServerStartNum, &ServerEndNum);
-		printf("\n");
-		printf("请输入中转服务器起始端口号-终止端口号，如10000-20000:");
-		scanf("%d-%d", &NATStartNum, &NATEndNum);
-		printf("\n");
-		printf("请输入端口号间隔:");
-		scanf("%d", &PortGap);
-		printf("\n");
-		printf("请输入远程服务器ip，注意中间点改成空格，如8.8.8.8请写为8 8 8 8:");
-		scanf("%d %d %d %d", &ip1, &ip2, &ip3, &ip4);
-		printf("\n");
-		printf("请输入转发协议(t=tcp or u=udp):");
-		scanf("%s", protocol);
-		printf("\n");
-		if (CheckInput()==1) {
-			printf("非法输入，请检查输入！\n");
-		}
-		else {
-			NATProtocol();
-			if (mode == 1) {
-				AddNAT();
-				printf("\n\n");
-				printf("执行完成!\n");
-			}
-			else {
-				DelNAT();
-				printf("\n\n");
-				printf("生成完成!\n");
-			}
-			printf("\n");
-			printf("执行完成！\n");
-		}
+	else {
+		NATProtocol();
+		AddNAT();
+		printf("\n\n");
+		printf("执行完成!\n");
+		goto MENU;
+	}
+	}
+	else if (mode == 2) {
+		DelNAT();
+		printf("\n\n");
+		printf("执行完成！\n");
+		goto MENU;
+	}
+	else if (mode == 3) {
+		CheckNAT();
+		goto MENU;
 	}
 	else if (mode == 4) {
 		printf("正在删除iptables规则. . .\n");
@@ -54,6 +53,7 @@ int main() {
 		system("systemctl stop iptables");
 		system("systemctl disable iptables");
 		printf("执行完成！\n");
+		goto MENU;
 	}
 	else if (mode == 5) {
 		system("wget https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/main/install_iptables.sh -O install_iptables.sh");
@@ -61,6 +61,7 @@ int main() {
 		system("bash install_iptables.sh");
 		system("rm -f install_iptables.sh");
 		printf("执行完成！\n");
+		goto MENU;
 	}
 	else{
 		exit(0);
@@ -110,7 +111,7 @@ int CheckNAT() {
 }
 
 int CheckInput() {
-	if (mode == 1 || mode == 2) {
+	if (mode == 1) {
 		if (ServerStartNum > ServerEndNum || NATStartNum > NATEndNum || ServerStartNum > 65535 || ServerEndNum > 65535 || NATStartNum > 65535 || NATEndNum > 65535) {
 			return 1;
 		}
