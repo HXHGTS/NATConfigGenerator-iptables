@@ -3,7 +3,7 @@
 
 int ServerStartNum, ServerEndNum, NATStartNum, NATEndNum, PortGap, ServerPort, NATPort,mode;
 int ip1,ip2,ip3,ip4;
-char cmd[200], protocol[5],local_ip[16];
+char cmd[200], protocol[5],local_ip[16],ip[16];
 FILE* info;
 int main() {
 	preload();
@@ -19,8 +19,8 @@ int main() {
 	printf("请输入端口号间隔:");
 	scanf("%d", &PortGap);
 	printf("\n");
-	printf("请输入远程服务器ip，注意中间点改成空格，如8.8.8.8请写为8 8 8 8:");
-	scanf("%d %d %d %d", &ip1, &ip2, &ip3, &ip4);
+	printf("请输入远程服务器ip，注意中间点改成空格，如8.8.8.8:");
+	scanf("%s", ip);
 	printf("\n");
 	printf("请输入转发协议(t=tcp or u=udp):");
 	scanf("%s", protocol);
@@ -71,7 +71,7 @@ int main() {
 
 int UI() {
 	printf("请注意：本软件仅支持CentOS系统，其它Linux系统不支持！\n\n");
-	printf("请选择要执行的操作：\n\n1.添加转发规则\n\n2.删除转发规则\n\n3.查询转发规则\n\n4.关闭iptables\n\n5.安装并开启iptables(第一次使用建议执行，否则可能会转发失败)\n\n0.退出\n\n请输入：");
+	printf("请选择要执行的操作：\n\n1.添加转发规则\n\n2.删除转发规则\n\n3.查询并备份转发规则\n\n4.关闭iptables\n\n5.安装并开启iptables(第一次使用建议执行，否则可能会转发失败)\n\n0.退出\n\n请输入：");
 	scanf("%d", &mode);
 	printf("\n");
 	return 0;
@@ -79,9 +79,9 @@ int UI() {
 
 int AddNAT() {
 	for (ServerPort = ServerStartNum, NATPort = NATStartNum; ServerPort <= ServerEndNum; ServerPort = ServerPort + PortGap, NATPort = NATPort + PortGap) {
-		sprintf(cmd, "iptables -t nat -A PREROUTING -p %s --dport %d -j DNAT --to-destination %d.%d.%d.%d:%d",protocol,NATPort,ip1,ip2,ip3,ip4,ServerPort);
+		sprintf(cmd, "iptables -t nat -A PREROUTING -p %s --dport %d -j DNAT --to-destination %s:%d",protocol,NATPort,ip,ServerPort);
 		system(cmd);
-		sprintf(cmd, "iptables -t nat -A POSTROUTING -p %s -d %d.%d.%d.%d --dport %d -j SNAT --to-source %s", protocol,ip1,ip2,ip3,ip4,ServerPort, local_ip);
+		sprintf(cmd, "iptables -t nat -A POSTROUTING -p %s -d %s --dport %d -j SNAT --to-source %s", protocol,ip,ServerPort, local_ip);
 		system(cmd);
 	}
 	system("service iptables save");
@@ -91,7 +91,8 @@ int AddNAT() {
 int DelNAT(){
 	int rule;
 	CheckNAT();
-	printf("想要删除第几行规则:");
+	printf("出站与入站规则同时配置，如果删除会被同时删除！\n");
+	printf("想要删除第几行规则（只看出站或入站规则即可）:");
 	scanf("%d", &rule);
 	sprintf(cmd,"iptables -t nat -D POSTROUTING %d",rule);
 	system(cmd);
@@ -104,9 +105,17 @@ int DelNAT(){
 
 int CheckNAT() {
 	printf("系统NAT设置记录:\n\n");
+	printf("出站规则:\n");
 	system("iptables -t nat -vnL POSTROUTING");
+	printf("入站规则:\n");
 	system("iptables -t nat -vnL PREROUTING");
 	printf("\n");
+	printf("正在备份规则. . .\n");
+	system("echo '出站规则' > route.backup");
+	system("iptables -t nat -vnL POSTROUTING  >> route.backup");
+	system("echo '入站规则' >> route.backup");
+	system("iptables -t nat -vnL PREROUTING  >> route.backup");
+	printf("规则已备份至/root/route.backup\n");
 	return 0;
 }
 
