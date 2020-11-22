@@ -10,21 +10,22 @@ int main() {
 	system("clear");
 	MENU:UI();
 	if (mode == 1) {
-	printf("请输入远程服务器起始端口号-终止端口号，如10000-20000:");
-	scanf("%d-%d", &ServerStartNum, &ServerEndNum);
-	printf("\n");
-	printf("请输入中转服务器起始端口号-终止端口号，如10000-20000:");
-	scanf("%d-%d", &NATStartNum, &NATEndNum);
-	printf("\n");
-	printf("请输入端口号间隔:");
-	scanf("%d", &PortGap);
-	printf("\n");
-	printf("请输入远程服务器ip，注意中间点改成空格，如8.8.8.8:");
-	scanf("%s", ip);
-	printf("\n");
-	printf("请输入转发协议(t=tcp or u=udp):");
-	scanf("%s", protocol);
-	printf("\n");
+		CheckNAT();
+		printf("请输入远程服务器起始端口号-终止端口号，如10000-20000:");
+		scanf("%d-%d", &ServerStartNum, &ServerEndNum);
+		printf("\n");
+		printf("请输入中转服务器起始端口号-终止端口号，如10000-20000:");
+		scanf("%d-%d", &NATStartNum, &NATEndNum);
+		printf("\n");
+		printf("请输入端口号间隔:");
+		scanf("%d", &PortGap);
+		printf("\n");
+		printf("请输入远程服务器ip，如8.8.8.8:");
+		scanf("%s", ip);
+		printf("\n");
+		printf("请输入转发协议(t=tcp or u=udp):");
+		scanf("%s", protocol);
+		printf("\n");
 	if (CheckInput() == 1) {
 		printf("非法输入，请检查输入！\n");
 	}
@@ -56,6 +57,7 @@ int main() {
 		goto MENU;
 	}
 	else if (mode == 5) {
+		system("echo '151.101.192.133 raw.githubusercontent.com' > /etc/hosts");
 		system("wget https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/main/install_iptables.sh -O install_iptables.sh");
 		system("chmod +x install_iptables.sh");
 		system("bash install_iptables.sh");
