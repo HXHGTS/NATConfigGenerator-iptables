@@ -12,6 +12,8 @@ echo "正在安装iptables. . ."
 
 yum install iptables iptables-services -y
 
+yum install bind-utils -y
+
 echo "正在启动iptables. . ."
 
 systemctl start iptables
