@@ -2,9 +2,8 @@
 #include <stdlib.h>
 
 int ServerStartNum, ServerEndNum, NATStartNum, NATEndNum, PortGap, ServerPort, NATPort,mode;
-int ip1,ip2,ip3,ip4;
-char cmd[200], protocol[5],local_ip[16],ip[16];
-FILE* info;
+char cmd[300], protocol[5],local_ip[16],ip[40];
+FILE* info,*resolve;
 int main() {
 	preload();
 	system("clear");
@@ -20,7 +19,7 @@ int main() {
 		printf("请输入端口号间隔:");
 		scanf("%d", &PortGap);
 		printf("\n");
-		printf("请输入远程服务器ip，如8.8.8.8:");
+		printf("请输入远程服务器域名或ip，如8.8.8.8:");
 		scanf("%s", ip);
 		printf("\n");
 		printf("请输入转发协议(t=tcp or u=udp):");
@@ -57,7 +56,6 @@ int main() {
 		goto MENU;
 	}
 	else if (mode == 5) {
-		system("echo '151.101.192.133 raw.githubusercontent.com' > /etc/hosts");
 		system("wget https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/main/install_iptables.sh -O install_iptables.sh");
 		system("chmod +x install_iptables.sh");
 		system("bash install_iptables.sh");
@@ -71,6 +69,18 @@ int main() {
 	return 0;
 }
 
+int Domain_Transfer() {
+	if (ip[0] != '0' && ip[0] != '1' && ip[0] != '2' && ip[0] != '3' && ip[0] != '4' && ip[0] != '5' && ip[0] != '6' && ip[0] != '7' && ip[0] != '8' && ip[0] != '9') {
+		sprintf(cmd, "nslookup -q=A %s | grep 'Address:' | grep -v '#53' > dns.resolve",ip);
+		system(cmd);
+		resolve = fopen("dns.resolve", "r");
+		fscanf(resolve, "Address: %s",ip);
+		fclose(resolve);
+		system("rm -f dns.resolve");
+	}
+	return 0;
+}
+
 int UI() {
 	printf("请注意：本软件仅支持CentOS系统，其它Linux系统不支持！\n\n");
 	printf("请选择要执行的操作：\n\n1.添加转发规则\n\n2.删除转发规则\n\n3.查询并备份转发规则\n\n4.关闭iptables\n\n5.安装并开启iptables(第一次使用建议执行，否则可能会转发失败)\n\n0.退出\n\n请输入：");
@@ -80,6 +90,7 @@ int UI() {
 }
 
 int AddNAT() {
+	Domain_Transfer();
 	for (ServerPort = ServerStartNum, NATPort = NATStartNum; ServerPort <= ServerEndNum; ServerPort = ServerPort + PortGap, NATPort = NATPort + PortGap) {
 		sprintf(cmd, "iptables -t nat -A PREROUTING -p %s --dport %d -j DNAT --to-destination %s:%d",protocol,NATPort,ip,ServerPort);
 		system(cmd);
@@ -149,5 +160,5 @@ int preload() {
 	info = fopen("net_info.txt", "r");
 	fscanf(info, "        inet %s  netmask %s  broadcast %s", local_ip, netmask, public_ip);
 	fclose(info);
-	system("rm -rf net_info.txt");
+	system("rm -f net_info.txt");
 }
