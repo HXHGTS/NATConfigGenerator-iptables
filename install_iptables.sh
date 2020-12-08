@@ -34,9 +34,9 @@ iptables -A INPUT -i lo -j ACCEPT
 
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 
-iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A INPUT -p icmp -m icmp --icmp-type 0 -j ACCEPT
 
-iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -j ACCEPT
 
 service iptables save
 
