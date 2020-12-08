@@ -8,16 +8,38 @@ curl https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/main/s
 
 sysctl -p
 
-echo "正在安装iptables. . ."
+echo "正在安装iptables与nslookup. . ."
 
 yum install iptables iptables-services -y
 
 yum install bind-utils -y
 
+echo "正在配置iptables默认规则. . ."
+
+iptables -P INPUT ACCEPT
+
+iptables -F
+
+iptables -X
+
+iptables -Z
+
+iptables -A INPUT -i lo -j ACCEPT
+
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+iptables -A INPUT -p icmp --icmp-type 8 -j ACCEPT
+
+iptables -P INPUT DROP
+
+iptables -P OUTPUT ACCEPT
+
+iptables -P FORWARD DROP
+
+service iptables save
+
 echo "正在启动iptables. . ."
 
-systemctl start iptables
-
-systemctl enable iptables
+systemctl restart iptables.service
 
 exit
