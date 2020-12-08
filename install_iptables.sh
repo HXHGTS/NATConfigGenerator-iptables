@@ -18,33 +18,13 @@ echo "正在配置iptables默认规则. . ."
 
 iptables -P INPUT ACCEPT
 
+iptables -P OUTPUT ACCEPT
+
 iptables -F
 
 iptables -X
 
 iptables -Z
-
-iptables -A INPUT -i lo -j ACCEPT
-
-iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-
-iptables -A INPUT -p tcp --dport 21 -j ACCEPT
-
-iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-
-iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-
-iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
-
-iptables -P INPUT DROP
-
-iptables -P OUTPUT ACCEPT
-
-iptables -P FORWARD DROP
-
-iptables -A INPUT -p icmp -m icmp --icmp-type 0 -j ACCEPT
-
-iptables -A OUTPUT -p icmp -m icmp --icmp-type 0 -j ACCEPT
 
 service iptables save
 
