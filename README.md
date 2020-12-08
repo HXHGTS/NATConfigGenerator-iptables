@@ -1,6 +1,6 @@
 # NATConfigGenerator-iptables
 
-NAT跳转服务器，流量中转，基于iptables，效率高
+NAT转发服务器，流量中转，基于iptables，效率高
 
 运行方式(CentOS7)：
 
