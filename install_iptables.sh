@@ -10,7 +10,7 @@ sysctl -p
 
 echo "正在安装iptables与nslookup. . ."
 
-yum install gcc gcc-c++ bzip2 iptables iptables-services bind-utils -y
+yum install gcc gcc-c++ bzip2 iptables-services bind-utils -y
 
 wget http://ftp.netfilter.org/pub/iptables/iptables-1.8.7.tar.bz2
 
