@@ -24,11 +24,11 @@ make & make install
 
 cd /usr/local/sbin
 
-cp -rf /usr/local/sbin/iptables /sbin/
+cp -f /usr/local/sbin/iptables /sbin/
 
-cp -rf /usr/local/sbin/iptables-restore /sbin/
+cp -f /usr/local/sbin/iptables-restore /sbin/
 
-cp -rf /usr/local/sbin/iptables-save /sbin/
+cp -f /usr/local/sbin/iptables-save /sbin/
 
 echo "正在配置iptables默认规则. . ."
 
@@ -43,6 +43,8 @@ iptables -X
 iptables -Z
 
 service iptables save
+
+rm -rf /root/iptables-1.8.7
 
 echo "正在启动iptables. . ."
 
