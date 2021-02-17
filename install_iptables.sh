@@ -10,9 +10,25 @@ sysctl -p
 
 echo "正在安装iptables与nslookup. . ."
 
-yum install iptables iptables-services -y
+yum install gcc gcc-c++ bzip2 iptables iptables-services bind-utils -y
 
-yum install bind-utils -y
+wget http://ftp.netfilter.org/pub/iptables/iptables-1.8.7.tar.bz2
+
+tar -xjf iptables-1.8.7.tar.bz2
+
+cd iptables-1.8.7
+
+./configure --disable-nftables
+
+make & make install
+
+cd /usr/local/sbin
+
+cp -rf /usr/local/sbin/iptables /sbin/
+
+cp -rf /usr/local/sbin/iptables-restore /sbin/
+
+cp -rf /usr/local/sbin/iptables-save /sbin/
 
 echo "正在配置iptables默认规则. . ."
 
