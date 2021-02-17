@@ -32,11 +32,11 @@ cp -f /usr/local/sbin/iptables-save /sbin/
 
 echo "正在配置iptables默认规则. . ."
 
+iptables -F
+
 iptables -P INPUT ACCEPT
 
 iptables -P OUTPUT ACCEPT
-
-iptables -F
 
 iptables -X
 
