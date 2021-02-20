@@ -56,7 +56,7 @@ int main() {
 		goto MENU;
 	}
 	else if (mode == 5) {
-		system("wget https://raw.githubusercontent.com/HXHGTS/NATConfigGenerator-iptables/main/install_iptables.sh -O install_iptables.sh");
+		system("wget https://cdn.jsdelivr.net/gh/HXHGTS/NATConfigGenerator-iptables/install_iptables.sh -O install_iptables.sh");
 		system("chmod +x install_iptables.sh");
 		system("bash install_iptables.sh");
 		system("rm -f install_iptables.sh");
