@@ -30,6 +30,6 @@ service iptables save
 
 echo "正在启动iptables. . ."
 
-systemctl start iptables.service
+systemctl restart iptables.service
 
 exit
