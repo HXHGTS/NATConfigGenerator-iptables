@@ -10,9 +10,9 @@ sysctl -p
 
 echo "正在安装iptables与nslookup. . ."
 
-yum install iptables-services bind-utils -y
+yum install bind-utils -y
 
-yum update iptables -y
+yum update iptables iptables-persistent iptables-services -y
 
 echo "正在配置iptables默认规则. . ."
 
